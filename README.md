@@ -9,7 +9,7 @@
 
 ## Description
 
-This project implements a **Long Short-Term Memory (LSTM) neural network** for the task of **regression prediction of air temperature**. The model leverages data collected from **commercial microwave links**, providing an innovative approach to environmental temperature sensing. This script focuses on the training and evaluation pipeline for the LSTM model, including data loading, preprocessing, scaling, model definition, training with TensorFlow's `tf.data` API, and performance evaluation.
+This project implements a **Long Short-Term Memory (LSTM) neural network** for the task of **regression prediction of air temperature**. The model leverages data collected from **commercial microwave links**, providing an innovative approach to environmental sensing. This script focuses on the training and evaluation pipeline for the LSTM model, including data loading, preprocessing, scaling, model definition, training with TensorFlow's `tf.data` API, and performance evaluation.
 
 The goal is to accurately predict air temperature based on various features derived from microwave link measurements and auxiliary data, demonstrating the potential of machine learning in environmental monitoring.
 
@@ -38,7 +38,3 @@ The goal is to accurately predict air temperature based on various features deri
 * **Scikit-learn**: For data splitting and feature scaling.
 * **Matplotlib**: For plotting and visualizing model results.
 * **Joblib**: For saving and loading the `StandardScaler` object.
-
----
-
-## File Structure
