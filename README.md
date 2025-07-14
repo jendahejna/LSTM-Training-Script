@@ -1,9 +1,5 @@
 # LSTM Air Temperature Prediction from Microwave Link Data
 
-# LSTM Air Temperature Prediction from Microwave Link Data
-
-![Status](https://img.shields.io/badge/Status-Development-orange)
-![License](https://img.shields.io/badge/License-MIT-blue)
 
 ---
 
