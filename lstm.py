@@ -24,8 +24,15 @@ else:
 
 # Konstanty
 scaler = StandardScaler()
+# Cesta k datům na D: disku s podadresáři
+base_data_dir = r'D:\Training_sets'
+
+# Cesty pro modely a výstupy zůstávají relativní k umístění skriptu
 model_path = './models'
 output_path = './output'
+scaler_save_path = '.' # Scaler se uloží do stejného adresáře, kde je skript
+
+
 PLOT_WIDTH = 252.0
 FONT_SIZE = 8.0
 FONT_FAMILY = "Times New Roman"
@@ -36,8 +43,11 @@ def plot_the_results(y_test, y_pred, title='', save=False, rasterized=False, for
     """
     Vykreslí porovnání skutečných a predikovaných hodnot.
     """
-    if save and not os.path.exists('figs'):
-        os.makedirs('figs')
+    if save:
+        # Zajistěte, že adresář 'figs' existuje uvnitř output_path (relativní cesty)
+        figs_dir = os.path.join(output_path, 'figs')
+        if not os.path.exists(figs_dir):
+            os.makedirs(figs_dir)
 
     plt.figure()
     # Pokud y_test je pandas Series, převede se na numpy pole
@@ -49,7 +59,7 @@ def plot_the_results(y_test, y_pred, title='', save=False, rasterized=False, for
     plt.tight_layout()
 
     if save:
-        plt.savefig(f'figs/{title}.{format}', format=format, dpi=1200, bbox_inches='tight')
+        plt.savefig(os.path.join(figs_dir, f'{title}.{format}'), format=format, dpi=1200, bbox_inches='tight')
     plt.show()
 
 # Funkce pro načtení a předzpracování dat ze všech CSV souborů v adresáři 'data'
@@ -94,7 +104,7 @@ def _scale_data(X_train, X_test):
     """
     X_train_scaled = scaler.fit_transform(X_train)
     X_test_scaled = scaler.transform(X_test)
-    joblib.dump(scaler, 'scaler.joblib')
+    joblib.dump(scaler, os.path.join(scaler_save_path, 'scaler.joblib')) # Uložení scaleru do relativní cesty
     return X_train_scaled, X_test_scaled
 
 # Výpočet metrik pro hodnocení modelu
@@ -185,13 +195,15 @@ def train_model(X_train, y_train, X_test, y_test, epochs=100, batch_size=128, sa
 
 # Hlavní část programu
 if __name__ == '__main__':
-    # Dynamické načtení všech CSV souborů z adresáře 'data'
-    dataset_dir = 'data'
-    dataset_filenames = [
-        os.path.join(dataset_dir, file)
-        for file in os.listdir(dataset_dir)
-        if file.endswith('.csv')
-    ]
+    # Dynamické načtení všech CSV souborů ze všech podadresářů v 'base_data_dir'
+    dataset_filenames = []
+    for root, dirs, files in os.walk(base_data_dir):
+        for file in files:
+            if file.endswith('.csv'):
+                dataset_filenames.append(os.path.join(root, file))
+
+    if not dataset_filenames:
+        raise FileNotFoundError(f"V adresáři '{base_data_dir}' ani jeho podadresářích nebyly nalezeny žádné CSV soubory.")
 
     df = _load_and_preprocess(dataset_filenames)
     X, y = _split_data(df)
@@ -207,7 +219,7 @@ if __name__ == '__main__':
     model, history, lstm_metrics, y_pred = train_model(
         X_train_scaled, y_train, X_test_scaled, y_test,
         epochs=100,
-        batch_size=128,  # Zvýšená velikost batch
+        batch_size=128,
         save_model=True,
         plot_results=True
     )
