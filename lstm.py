@@ -158,11 +158,9 @@ class LSTMTuningHyperModel(HyperModel):
 
 # Hlavní část programu
 if __name__ == '__main__':
-    # --- Zajištění existence výstupních adresářů na začátku ---
-    # To zabrání FileNotFoundError, pokud adresář 'output' nebo 'output/figs' neexistuje.
     os.makedirs(model_path, exist_ok=True)
     os.makedirs(output_path, exist_ok=True)
-    os.makedirs(os.path.join(output_path, 'figs'), exist_ok=True)  # Zajistí existenci adresáře pro obrázky
+    os.makedirs(os.path.join(output_path, 'figs'), exist_ok=True)  
 
     dataset_filenames = []
     for root, dirs, files in os.walk(base_data_dir):
