@@ -25,7 +25,7 @@ else:
 # Konstanty
 scaler = StandardScaler()
 # Cesta k datům na D: disku s podadresáři
-base_data_dir = r'D:\Training_sets'
+base_data_dir = r'Training_sets'
 
 # Cesty pro modely a výstupy zůstávají relativní k umístění skriptu
 model_path = './models'
